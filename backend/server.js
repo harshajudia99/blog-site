@@ -13,10 +13,20 @@ app.get('/',(req,res)=>{
     res.send("Hello world")
 })
 
+app.get('/getauthor', async(req,res) =>{
+  const data = await Author.find();
+    res.json(data);
+})
+
 app.post('/createauthor', async (req,res) => {
-    let todo = new Author(req.body);
-    let result = await todo.save();
+    let author = new Author(req.body);
+    let result = await author.save();
     res.send(result);
+})
+
+app.delete('/deleteauthor/:id', async(req,res)=>{
+  let result = await Author.deleteOne({_id: req.params.id});
+  res.send(result);
 })
 
 app.listen(port, () => {

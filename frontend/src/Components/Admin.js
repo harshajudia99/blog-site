@@ -1,7 +1,12 @@
 import React from 'react'
+import RegisterAuthor from './RegisterAuthor'
+import AuthorList from './AuthorList'
 
 export const Admin = () => {
   return (
-    <div>Admin</div>
+    <div>
+      <RegisterAuthor/>
+      <AuthorList/>
+    </div>
   )
 }
