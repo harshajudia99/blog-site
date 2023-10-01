@@ -32,44 +32,56 @@ const style = {
     p: 4,
 };
 
-export default function RegisterAuthor() {
-    const [open, setOpen] = React.useState(false);
+const initialFormData = {
+    fname:'',
+    lname:'',
+    email:'',
+    mobile:'',
+    image:''
+}
+
+export default function RegisterAuthor({open, setOpen}) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    const [formData, setFormData] = React.useState({
-        fname:'',
-        lname:'',
-        email:'',
-        mobile:''
-    })
+    const [image, setImage] = React.useState(null)
+    const [formData, setFormData] = React.useState(initialFormData)
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+        console.log(event)
         setFormData({
             ...formData,
             [name]: value,
         });
-    };    
-
-    const addAuthor = async () => {
-        const requestData = {
-            fname: formData.fname,
-            lname: formData.lname,
-            email: formData.email,
-            mobile: formData.mobile,
-        };
+        console.log(name,value)
+    };   
     
+    const handleImage = (e) =>{
+        setImage(e.target.files[0])
+    }
+
+    const addAuthor = async (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append('fname',formData.fname);
+        data.append('lname', formData.lname);
+        data.append('email', formData.email);
+        data.append('mobile', formData.mobile);
+        data.append('file', image);
+        
         let result = await fetch('http://localhost:3000/createauthor', {
             method: "POST",
-            body: JSON.stringify(requestData), 
-            headers: {
-                "Content-Type": "application/json",
-            }
+            header: {
+                'content-type':'multipart/form-data'
+            },
+            body: data 
         });
     
         result = await result.json();
         console.log(result);
+
+        handleClose();
+        setFormData(initialFormData);
     }
     
 
@@ -86,7 +98,7 @@ export default function RegisterAuthor() {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Register Author
                     </Typography>
-                    <form onSubmit={addAuthor}>
+                    <form onSubmit={addAuthor} enctype='multipart/form-data'>
                         <TextField
                             name='fname'
                             label="First name"
@@ -121,7 +133,7 @@ export default function RegisterAuthor() {
                         />
                         <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
                             Upload file
-                            <VisuallyHiddenInput type="file" />
+                            <VisuallyHiddenInput type="file" onChange={handleImage} name='image'/>
                         </Button>
                         <br /><br />
                         <Button type="submit" variant="contained">Save author</Button>

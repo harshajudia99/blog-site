@@ -3,7 +3,7 @@ import React from 'react'
 const UpdateAuthor = () => {
   return (
     <div>
-      Update Author
+      Update
     </div>
   )
 }
