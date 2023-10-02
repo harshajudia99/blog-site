@@ -2,6 +2,7 @@ const express = require("express");
 require("./db/config");
 const cors = require("cors");
 const Author = require("./db/Author");
+const Blog = require("./db/Blog");
 const multer = require('multer');
 
 const app = express()
@@ -76,8 +77,31 @@ app.put('/updateauthor/:id', upload.single('file'), async (req, resp) => {
   }
 });
 
-app.get('/',(req,res)=>{
-    res.send("Hello world")
+
+app.post('/createauthor', upload.single('file'), async (req, res) => {
+  console.log(req)
+  try {
+    let author = new Author({
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      image: req.file.filename,
+    });
+
+    let result = await author.save();
+    
+    res.status(201).json(result); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' }); 
+  }
+});
+
+
+app.get('/get/:id', async(req,res)=>{
+  let result = await Author.findOne({_id: req.params.id})
+  res.send(result);
 })
 
 app.get('/getauthor', async(req,res) =>{
@@ -89,6 +113,76 @@ app.delete('/deleteauthor/:id', async(req,res)=>{
   let result = await Author.deleteOne({_id: req.params.id});
   res.send(result);
 })
+
+app.post('/addblog',upload.single('file'), async(req,res)=>{
+  try {
+    let author = new Blog({
+      name: req.body.name,
+      title: req.body.title,
+      description: req.body.description,
+      image: req.file.filename,
+      status: req.body.status
+    });
+
+    let result = await author.save();
+    
+    res.status(201).json(result); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' }); 
+  }
+});
+
+app.get('/getblog', async(req,res) =>{
+  const data = await Blog.find();
+    res.json(data);
+})
+
+
+app.put('/updateblog/:id', upload.single('file'), async (req, resp) => {
+  try {
+
+    const updateFields = {};
+
+    if (req.file) {
+      updateFields.image = req.file.filename;
+    }
+    if (req.body.name) {
+      updateFields.name = req.body.name;
+    }
+    if (req.body.title) {
+      updateFields.title = req.body.title;
+    }
+    if (req.body.description) {
+      updateFields.description = req.body.description;
+    }
+    if (req.body.status) {
+      updateFields.status = req.body.status;
+    }
+
+    const result = await Blog.updateOne(
+      { _id: req.params.id },
+      {
+        $set: updateFields,
+      }
+    );
+
+    resp.send(result);
+  } catch (error) {
+    resp.status(500).send('Error updating author with image and other fields');
+  }
+});
+
+app.get('/getblogdata/:id', async(req,res)=>{
+  let result = await Blog.findOne({_id: req.params.id})
+  res.send(result);
+})
+
+app.delete('/deleteblog/:id', async(req,res)=>{
+  let result = await Blog.deleteOne({_id: req.params.id});
+  res.send(result);
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

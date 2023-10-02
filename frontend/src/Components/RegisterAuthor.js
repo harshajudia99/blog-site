@@ -46,6 +46,7 @@ export default function RegisterAuthor({open, setOpen}) {
     const [image, setImage] = React.useState(null)
     const [formData, setFormData] = React.useState(initialFormData)
 
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         console.log(event)
@@ -53,7 +54,6 @@ export default function RegisterAuthor({open, setOpen}) {
             ...formData,
             [name]: value,
         });
-        console.log(name,value)
     };   
     
     const handleImage = (e) =>{
@@ -87,7 +87,7 @@ export default function RegisterAuthor({open, setOpen}) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Open modal</Button>
+            <Button onClick={handleOpen}>add Author</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -96,7 +96,7 @@ export default function RegisterAuthor({open, setOpen}) {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Register Author
+                        Add Author
                     </Typography>
                     <form onSubmit={addAuthor} enctype='multipart/form-data'>
                         <TextField

@@ -24,7 +24,9 @@ export default function AuthorList({ open, setOpen }) {
         setAuthorData(result);
     };
 
-    const deleteAuthor = async (id) => {
+    const deleteAuthor = async (id, title) => {
+        const confirmation = window.confirm(`Are you sure you want to delete author ${title} ?`);
+    if(confirmation){
         let result = await fetch(`http://localhost:3000/deleteauthor/${id}`, {
             method: 'DELETE',
         });
@@ -32,6 +34,7 @@ export default function AuthorList({ open, setOpen }) {
         if (result) {
             getAuthors();
         }
+    }
     };
 
     return (
@@ -62,11 +65,11 @@ export default function AuthorList({ open, setOpen }) {
                                 <TableCell align="right">{row.lname}</TableCell>
                                 <TableCell align="right">{row.email}</TableCell>
                                 <TableCell align="right">{row.mobile}</TableCell>
-                                <TableCell align="right"><img src={`http://localhost:5500/backend/uploads/${row.image}`} alt="Author Image" /></TableCell>
+                                <TableCell align="right"><img src={`http://localhost:5500/backend/uploads/${row.image}`} alt="Author Image" className='author-image'/></TableCell>
                                 <Button type="submit" size="small">
                                     <Link className="update-btn-link" to={`/updateauthor/${row._id}`}>Update Author</Link>
                                 </Button>
-                                <DeleteOutlineIcon onClick={() => deleteAuthor(row._id)} className='del-btn' />
+                                <DeleteOutlineIcon onClick={() => deleteAuthor(row._id, row.fname)} className='del-btn' />
                             </TableRow>
                         ))}
                     </TableBody>
