@@ -104,7 +104,7 @@ const handleImage = (e) =>{
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h6" component="h2" className="update-author-dialog">
             Update Author
           </Typography>
           <form onSubmit={updateAuthor} enctype="multipart/form-data">
@@ -115,6 +115,7 @@ const handleImage = (e) =>{
               value={updateFormData.fname}
               onChange={handleInputChange}
               required
+              className="update-blog-inputfield"
             />
             <TextField
               name="lname"
@@ -123,6 +124,7 @@ const handleImage = (e) =>{
               value={updateFormData.lname}
               onChange={handleInputChange}
               required
+              className="update-blog-inputfield"
             />
             <TextField
               name="email"
@@ -131,6 +133,7 @@ const handleImage = (e) =>{
               value={updateFormData.email}
               onChange={handleInputChange}
               required
+              className="update-blog-inputfield"
             />
             <TextField
               name="mobile"
@@ -139,6 +142,7 @@ const handleImage = (e) =>{
               value={updateFormData.mobile}
               onChange={handleInputChange}
               required
+              className="update-blog-inputfield"
             />
             <Button
               component="label"

@@ -17,11 +17,7 @@ export const SelectAuthor = () => {
     getAuthors();
   }, []);
 
-  useEffect(() => {
-    if (authorData.length > 0) {
-      setName(authorData[0]._id);
-    }
-  }, [authorData]);
+
 
   const handleChange = (event) => {
     const selectedName = event.target.value;
@@ -48,29 +44,28 @@ export const SelectAuthor = () => {
     <div>
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Select an author</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            name="author"
             value={name}
-            label="Select an author"
             onChange={handleChange}
+            placeholder="Select an author"
+            className="select-author-field"
           >
-            {loading ? (
-              <MenuItem disabled>Loading...</MenuItem>
-            ) : (
-              authorData.map((result) => (
-                <MenuItem key={result._id} value={result._id}>
-                  {result?.fname} {result?.lname}
-                </MenuItem>
-              ))
-            )}
+            {authorData.map((item) => (
+              <MenuItem key={item._id} value={item._id}>
+                {item?.fname} {item?.lname}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
       <p>Selected Author: {fullName}</p>
-      <AddBlog fullName={fullName}/>
-      <GetBlog fullName={fullName}/>
+      {
+        fullName !== '' && (
+          <AddBlog fullName={fullName} />
+        )
+      }
+      <GetBlog fullName={fullName} />
     </div>
   );
 };

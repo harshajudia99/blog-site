@@ -33,14 +33,14 @@ const style = {
 };
 
 const initialFormData = {
-    fname:'',
-    lname:'',
-    email:'',
-    mobile:'',
-    image:''
+    fname: '',
+    lname: '',
+    email: '',
+    mobile: '',
+    image: ''
 }
 
-export default function RegisterAuthor({open, setOpen}) {
+export default function RegisterAuthor({ open, setOpen }) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [image, setImage] = React.useState(null)
@@ -54,40 +54,50 @@ export default function RegisterAuthor({open, setOpen}) {
             ...formData,
             [name]: value,
         });
-    };   
-    
-    const handleImage = (e) =>{
+    };
+
+    const handleImage = (e) => {
         setImage(e.target.files[0])
+    }
+
+    function renderImage() {
+        if (image instanceof File) {
+            // If authorData.Image is a File object, create a temporary URL
+            return <img className="add-author-img" alt="ima" src={URL.createObjectURL(image)} />;
+        } else {
+            // If authorData.Image is a URL, use it directly
+            return <img className="add-author-img" alt="ima" src={`http://localhost:5500/backend/uploads/${image}`} />;
+        }
     }
 
     const addAuthor = async (e) => {
         e.preventDefault();
         const data = new FormData();
-        data.append('fname',formData.fname);
+        data.append('fname', formData.fname);
         data.append('lname', formData.lname);
         data.append('email', formData.email);
         data.append('mobile', formData.mobile);
         data.append('file', image);
-        
+
         let result = await fetch('http://localhost:3000/createauthor', {
             method: "POST",
             header: {
-                'content-type':'multipart/form-data'
+                'content-type': 'multipart/form-data'
             },
-            body: data 
+            body: data
         });
-    
+
         result = await result.json();
         console.log(result);
 
         handleClose();
         setFormData(initialFormData);
     }
-    
+
 
     return (
         <div>
-            <Button onClick={handleOpen}>add Author</Button>
+            <Button onClick={handleOpen} variant='contained' className='add-author-btn'>add Author</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -95,7 +105,7 @@ export default function RegisterAuthor({open, setOpen}) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    <Typography id="modal-modal-title" variant="h6" component="h2" className='add-author-dialog'>
                         Add Author
                     </Typography>
                     <form onSubmit={addAuthor} enctype='multipart/form-data'>
@@ -106,6 +116,7 @@ export default function RegisterAuthor({open, setOpen}) {
                             value={formData.fname}
                             onChange={handleInputChange}
                             required
+                            className='add-author-inputfield'
                         />
                         <TextField
                             name='lname'
@@ -114,6 +125,7 @@ export default function RegisterAuthor({open, setOpen}) {
                             value={formData.lname}
                             onChange={handleInputChange}
                             required
+                            className='add-author-inputfield'
                         />
                         <TextField
                             name='email'
@@ -122,6 +134,7 @@ export default function RegisterAuthor({open, setOpen}) {
                             value={formData.email}
                             onChange={handleInputChange}
                             required
+                            className='add-author-inputfield'
                         />
                         <TextField
                             name='mobile'
@@ -130,10 +143,15 @@ export default function RegisterAuthor({open, setOpen}) {
                             value={formData.mobile}
                             onChange={handleInputChange}
                             required
+                            className='add-author-inputfield'
                         />
+                        <Typography className="renderImage" id="modal-modal-title" variant="h6" component="h2">
+                            {image ? renderImage() : "Upload image"}
+                        </Typography>
+
                         <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
                             Upload file
-                            <VisuallyHiddenInput type="file" onChange={handleImage} name='image'/>
+                            <VisuallyHiddenInput type="file" onChange={handleImage} name='image' />
                         </Button>
                         <br /><br />
                         <Button type="submit" variant="contained">Save author</Button>

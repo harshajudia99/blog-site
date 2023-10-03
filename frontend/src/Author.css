@@ -21,3 +21,114 @@
 .view-profile-btn {
   margin: 0 auto !important;
 }
+
+.author-profile-blog-card {
+  width: 345px;
+  margin: 20px auto;
+}
+
+.author-blog-list{
+  width: 700px !important;
+  margin: 20px auto;
+}
+
+.post-title{
+  width: fit-content;
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.view-blog{
+  margin: 50px 20px;
+  color: white;
+  background-color: rgba(0,0,0,0.8);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.view-blog-description{
+  max-width: 80%;
+  text-indent: 100px;
+  text-align: justify;
+  margin: 50px auto 40px;
+}
+
+.desc-sort-btn{
+  margin-left: 467px !important;
+}
+
+.admin-blog-list{
+  width: 850px !important;
+  margin: 30px auto;
+}
+
+.select-author-field{
+  width: 300px;
+  margin: 10px auto;
+}
+
+.author-list{
+  width: 800px !important;
+  margin: 50px auto;
+}
+
+.add-author-btn{
+  margin-top: 30px !important;
+}
+
+.blog-list-edit{
+  width: 95px !important;
+}
+
+.intro {
+  margin-top: 40px;
+}
+
+.add-blog-dialog{
+  width: 109px !important;
+  margin: 10px auto !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+}
+
+.add-blog-inputfield{
+  width: 330px !important;
+}
+
+.add-blog-switch{
+  margin-top: 15px;
+}
+
+.postImage{
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.update-blog-dialog, .add-author-dialog, .update-author-dialog{
+  margin: 10px auto !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  width: 154px !important;
+}
+
+.update-blog-inputfield, .update-author-inputfield{
+  width: 325px;
+  margin-bottom: 20px !important;
+}
+
+.add-author-dialog{
+  width: 135px !important;
+}
+
+.add-author-inputfield{
+  width: 325px;
+}
+
+.add-author-img{
+  width: 50px;
+  margin: 15px 0 10px;
+}
+
+.update-author-dialog{
+  width: 170px !important;
+}

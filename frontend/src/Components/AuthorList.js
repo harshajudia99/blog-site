@@ -7,8 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 export default function AuthorList({ open, setOpen }) {
 
@@ -26,19 +27,19 @@ export default function AuthorList({ open, setOpen }) {
 
     const deleteAuthor = async (id, title) => {
         const confirmation = window.confirm(`Are you sure you want to delete author ${title} ?`);
-    if(confirmation){
-        let result = await fetch(`http://localhost:3000/deleteauthor/${id}`, {
-            method: 'DELETE',
-        });
-        result = await result.json();
-        if (result) {
-            getAuthors();
+        if (confirmation) {
+            let result = await fetch(`http://localhost:3000/deleteauthor/${id}`, {
+                method: 'DELETE',
+            });
+            result = await result.json();
+            if (result) {
+                getAuthors();
+            }
         }
-    }
     };
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className='author-list'>
             {authorData.length === 0 ? (
                 <div>No author found!</div>
             ) : (
@@ -65,11 +66,16 @@ export default function AuthorList({ open, setOpen }) {
                                 <TableCell align="right">{row.lname}</TableCell>
                                 <TableCell align="right">{row.email}</TableCell>
                                 <TableCell align="right">{row.mobile}</TableCell>
-                                <TableCell align="right"><img src={`http://localhost:5500/backend/uploads/${row.image}`} alt="Author Image" className='author-image'/></TableCell>
-                                <Button type="submit" size="small">
+                                <TableCell align="right"><img src={`http://localhost:5500/backend/uploads/${row.image}`} alt="Author Image" className='author-image' /></TableCell>
+                                <TableCell align="right">
+                                    {/* <Button type="submit" size="small">
                                     <Link className="update-btn-link" to={`/updateauthor/${row._id}`}>Update Author</Link>
-                                </Button>
-                                <DeleteOutlineIcon onClick={() => deleteAuthor(row._id, row.fname)} className='del-btn' />
+                                </Button> */}
+                                    <IconButton size="small" component={Link} to={`/updateauthor/${row._id}`}>
+                                        <ModeEditIcon />
+                                    </IconButton>
+                                    <DeleteOutlineIcon onClick={() => deleteAuthor(row._id, row.fname)} className='del-btn' />
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

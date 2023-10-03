@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -61,31 +61,42 @@ export default function AddBlog({ fullName }) {
     });
   };
 
-
-    const addBlog = async (e) => {
-      e.preventDefault();
-      const data = new FormData();
-      data.append('name',fullName);
-      data.append('title',formData.title);
-      data.append('description', formData.description);
-      data.append('status', checked);
-      data.append('file', image);
-      
-      let result = await fetch('http://localhost:3000/addblog', {
-          method: "POST",
-          header: {
-              'content-type':'multipart/form-data'
-          },
-          body: data 
-      });
-  
-      result = await result.json();
-      console.log(result);
-
-      handleClose();
-      setFormData(initialFormData);
+  function renderImage() {
+    if (image instanceof File) {
+      // If authorData.Image is a File object, create a temporary URL
+      return <img className="postImage" alt="ima" src={URL.createObjectURL(image)} />;
+    } else {
+      // If authorData.Image is a URL, use it directly
+      return <img className="postImage" alt="ima" src={`http://localhost:5500/backend/uploads/${image}`} />;
+    }
   }
-  
+
+
+  const addBlog = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append('name', fullName);
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('status', checked);
+    data.append('file', image);
+
+    let result = await fetch('http://localhost:3000/addblog', {
+      method: "POST",
+      header: {
+        'content-type': 'multipart/form-data'
+      },
+      body: data
+    });
+
+    result = await result.json();
+    console.log(result);
+
+    handleClose();
+    setFormData(initialFormData);
+    window.location.reload(true);
+  }
+
 
   const handleImage = (e) => {
     setImage(e.target.files[0])
@@ -93,7 +104,7 @@ export default function AddBlog({ fullName }) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Add Blog</Button>
+      <Button variant="contained" onClick={handleOpen}>Add Blog</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -101,7 +112,7 @@ export default function AddBlog({ fullName }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h6" component="h2" className="add-blog-dialog">
             Add Blog
           </Typography>
           <form onSubmit={addBlog} enctype="multipart/form-data">
@@ -111,6 +122,7 @@ export default function AddBlog({ fullName }) {
               variant="standard"
               value={fullName}
               readOnly
+              className="add-blog-inputfield"
             />
             <TextField
               name="title"
@@ -119,6 +131,7 @@ export default function AddBlog({ fullName }) {
               value={formData.title}
               onChange={handleInputChange}
               required
+              className="add-blog-inputfield"
             />
             <TextField
               name="description"
@@ -127,12 +140,18 @@ export default function AddBlog({ fullName }) {
               value={formData.description}
               onChange={handleInputChange}
               required
+              className="add-blog-inputfield"
             />
 
             <FormControlLabel
-              label="Toggle Switch"
+              className="add-blog-switch"
+              label="Status"
               control={<Switch checked={checked} onChange={handleChange} />}
-            /><br/><br/>
+            /><br /><br />
+
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {image ? renderImage() : "Upload image"}
+            </Typography>
 
             <Button
               component="label"

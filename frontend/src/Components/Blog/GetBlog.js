@@ -8,10 +8,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
-
-export const GetBlog = ({ fullName }) => {
+export const GetBlog = () => {
 
     const [blogData, setBlogData] = useState([]);
 
@@ -41,7 +41,7 @@ export const GetBlog = ({ fullName }) => {
 
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className='admin-blog-list'>
             {blogData.length === 0 ? (
                 <div>No author found!</div>
             ) : (
@@ -50,7 +50,7 @@ export const GetBlog = ({ fullName }) => {
                         <TableRow>
                             <TableCell>Name</TableCell>
                             <TableCell align="right">Title</TableCell>
-                            <TableCell align="right">Description</TableCell>
+                            <TableCell align="center">Description</TableCell>
                             <TableCell align="right">Status</TableCell>
                             <TableCell align="right">Image</TableCell>
                             <TableCell align="right">Edit</TableCell>
@@ -69,10 +69,15 @@ export const GetBlog = ({ fullName }) => {
                                 <TableCell align="right">{row.description}</TableCell>
                                 <TableCell align="right">{row.status ? 'true' : 'false'}</TableCell>
                                 <TableCell align="right"><img src={`http://localhost:5500/backend/uploads/${row.image}`} alt="Blog Image" className='blog-image' /></TableCell>
-                                <Button type="submit" size="small">
-                                    <Link className="update-btn-link" to={`/updateblog/${row._id}`}>Update Blog</Link>
-                                </Button>
-                                <DeleteOutlineIcon onClick={() => deleteBlog(row._id, row.title)} className='del-btn' />
+                                <TableCell align="right" className='blog-list-edit'>
+                                    {/* <Button type="submit" size="small">
+                                        <Link className="update-btn-link" to={`/updateblog/${row._id}`}>Update Blog</Link>
+                                    </Button> */}
+                                    <IconButton size="small" component={Link} to={`/updateblog/${row._id}`}>
+                                        <ModeEditIcon />
+                                    </IconButton>
+                                    <DeleteOutlineIcon onClick={() => deleteBlog(row._id, row.title)} className='del-btn del-btn-bloglist' />
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
