@@ -8,9 +8,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-export const AuthorPost = ({ name }) => {
+export const AuthorPost = ({ name, authorId }) => {
   const [blogData, setBlogData] = useState([]);
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export const AuthorPost = ({ name }) => {
     let result = await fetch("http://localhost:3000/getblog");
     result = await result.json();
 
-    const filteredData = result.filter((post) => post.name === name);
+    const filteredData = result.filter((post) => post.authorId === authorId);
     setBlogData(filteredData);
   };
 

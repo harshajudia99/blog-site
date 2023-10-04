@@ -12,6 +12,7 @@ export const SelectAuthor = () => {
   const [authorData, setAuthorData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fullName, setFullName] = useState('');
+  const [authorId, setauthorId] = useState('');
 
   useEffect(() => {
     getAuthors();
@@ -23,9 +24,10 @@ export const SelectAuthor = () => {
     const selectedName = event.target.value;
     setName(selectedName);
 
-    const selectedStudent = authorData.find((item) => item._id === selectedName);
-    if (selectedStudent) {
-      setFullName(`${selectedStudent.fname} ${selectedStudent.lname}`);
+    const selectedAuthor = authorData.find((item) => item._id === selectedName);
+    if (selectedAuthor) {
+      setFullName(`${selectedAuthor.fname} ${selectedAuthor.lname}`);
+      setauthorId(selectedAuthor._id)
     }
   };
 
@@ -62,7 +64,7 @@ export const SelectAuthor = () => {
       <p>Selected Author: {fullName}</p>
       {
         fullName !== '' && (
-          <AddBlog fullName={fullName} />
+          <AddBlog fullName={fullName} authorId={authorId}/>
         )
       }
       <GetBlog fullName={fullName} />

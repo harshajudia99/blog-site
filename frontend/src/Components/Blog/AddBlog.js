@@ -39,7 +39,7 @@ const initialFormData = {
   description: ''
 }
 
-export default function AddBlog({ fullName }) {
+export default function AddBlog({ fullName, authorId }) {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -75,6 +75,7 @@ export default function AddBlog({ fullName }) {
   const addBlog = async (e) => {
     e.preventDefault();
     const data = new FormData();
+    data.append('authorId',authorId)
     data.append('name', fullName);
     data.append('title', formData.title);
     data.append('description', formData.description);
@@ -116,6 +117,14 @@ export default function AddBlog({ fullName }) {
             Add Blog
           </Typography>
           <form onSubmit={addBlog} enctype="multipart/form-data">
+          <TextField
+              name="authorId"
+              label="Author Id"
+              variant="standard"
+              value={authorId}
+              readOnly
+              className="add-blog-inputfield"
+            />
             <TextField
               name="name"
               label="Name"

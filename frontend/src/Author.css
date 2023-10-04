@@ -132,3 +132,76 @@
 .update-author-dialog{
   width: 170px !important;
 }
+
+.likes-count{
+  margin: 0 10px;
+}
+
+.comment-box{
+  border: 1px solid black;
+  margin: 10px auto ;
+}
+
+.comment-name{
+  font-size: 24px;
+  font-weight: 500;
+  width: fit-content;
+  margin-left: 20px;
+}
+
+.comment-comment{
+  font-weight: 400;
+  margin-left: 20px;
+  width: fit-content;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.comment-container{
+  width: 1000px;
+  margin: 40px auto 0;
+}
+
+.comment-title{
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.like-btn-container{
+  margin-top: 10px;
+}
+
+.likes-btn-svg{
+  width: 150px;
+  display: flex;
+  margin: 0 auto;
+}
+
+.likes-comments{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 55px;
+}
+
+.comment-name-inputfield{
+  margin-bottom: 7px !important;
+  width: 325px;
+}
+
+.comment-text-inputfield{
+  margin-bottom: 15px !important;
+  width: 325px;
+}
+
+.comment-btn{
+  text-transform: lowercase !important;
+  display: block !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+}
+
+.comment-btn::first-letter{
+  text-transform: uppercase !important;
+}

@@ -36,6 +36,7 @@ const style = {
 };
 
 const initialFormData = {
+  authorId:"",
   name: "",
   title: "",
   description: "",
@@ -82,6 +83,7 @@ export const UpdateBlog = () => {
   const updateBlog = async (e) => {
     e.preventDefault();
     const data = new FormData();
+    data.append("authorId", updateFormData.authorId);
     data.append("name", updateFormData.name);
     data.append("title", updateFormData.title);
     data.append("description", updateFormData.description);
@@ -116,6 +118,14 @@ export const UpdateBlog = () => {
             Update Blog
           </Typography>
           <form onSubmit={updateBlog} enctype="multipart/form-data">
+          <TextField
+              name="authorId"
+              label="Author Id"
+              variant="standard"
+              value={updateFormData.authorId}
+              readOnly
+              className="update-blog-inputfield"
+            />
             <TextField
               name="name"
               label="Name"

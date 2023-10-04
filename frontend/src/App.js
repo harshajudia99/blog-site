@@ -10,6 +10,8 @@ import { UpdateBlog } from './Components/Blog/UpdateBlog';
 import AuthorProfile from './Components/ViewBlog/AuthorProfile';
 import { BlogClient } from './Components/BlogClient';
 import { ViewBlog } from './Components/ViewBlog/ViewBlog';
+import { MostLiked } from './Components/LikesAndComments/MostLiked';
+import { MostCommented } from './Components/LikesAndComments/MostCommented';
 function App() {
   return (
     <div className="App">
@@ -25,6 +27,8 @@ function App() {
               <Route path="/updateblog/:id" element={<UpdateBlog />} />
               <Route path="/profile/:id" element={<AuthorProfile/>}/>
               <Route path="/viewblog/:id" element={<ViewBlog/>}/>
+              <Route path="/mostliked" element={<MostLiked/>}/>
+              <Route path="/mostcommented" element={<MostCommented/>}/>
           </Routes>
       </BrowserRouter>
     </div>

@@ -43,6 +43,16 @@ export default function Navbar(props) {
                   Blog
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/mostliked" style={{ color: 'black' }}>
+                  MostLiked
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/mostcommented" style={{ color: 'black' }}>
+                  MostCommented
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

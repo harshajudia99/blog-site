@@ -117,11 +117,13 @@ app.delete('/deleteauthor/:id', async(req,res)=>{
 app.post('/addblog',upload.single('file'), async(req,res)=>{
   try {
     let author = new Blog({
+      authorId: req.body.authorId,
       name: req.body.name,
       title: req.body.title,
       description: req.body.description,
       image: req.file.filename,
-      status: req.body.status
+      status: req.body.status,
+      likes: 0
     });
 
     let result = await author.save();
@@ -132,6 +134,8 @@ app.post('/addblog',upload.single('file'), async(req,res)=>{
     res.status(500).json({ error: 'Internal server error' }); 
   }
 });
+
+
 
 app.get('/getblog', async(req,res) =>{
   const data = await Blog.find();
@@ -147,6 +151,9 @@ app.put('/updateblog/:id', upload.single('file'), async (req, resp) => {
     if (req.file) {
       updateFields.image = req.file.filename;
     }
+    if(req.body.authorId){
+      updateFields.authorId = req.body.authorId;
+    }
     if (req.body.name) {
       updateFields.name = req.body.name;
     }
@@ -156,8 +163,11 @@ app.put('/updateblog/:id', upload.single('file'), async (req, resp) => {
     if (req.body.description) {
       updateFields.description = req.body.description;
     }
-    if (req.body.status) {
+    if (req.body.status !== undefined) {
       updateFields.status = req.body.status;
+    }
+    if (req.body.likes) {
+      updateFields.likes = req.body.likes;
     }
 
     const result = await Blog.updateOne(
@@ -170,6 +180,28 @@ app.put('/updateblog/:id', upload.single('file'), async (req, resp) => {
     resp.send(result);
   } catch (error) {
     resp.status(500).send('Error updating author with image and other fields');
+  }
+});
+
+
+app.post('/insertcomment/:id' , async (req, res) => {
+  try {
+    const updatedBlog = await Blog.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: { comments: { authorName: req.body.authorName, comment: req.body.comment } },
+      },
+      { new: true }
+    );
+
+    if (!updatedBlog) {
+      return res.status(404).json({ Message: 'Blog not found' });
+    }
+
+    return res.status(201).json({ Message: 'Comment added successfully', updatedBlog });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ Message: 'Error inside server' });
   }
 });
 

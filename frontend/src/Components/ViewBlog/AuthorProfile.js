@@ -33,7 +33,6 @@ export default function AuthorProfile() {
         <CardMedia
           sx={{ height: 140 }}
           image={`http://localhost:5500/backend/uploads/${authorData.image}`}
-          title={authorData.title}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -46,7 +45,7 @@ export default function AuthorProfile() {
       </Card>
 
     </div>
-    <AuthorPost name={`${authorData.fname} ${authorData.lname}`}/>
+    <AuthorPost name={`${authorData.fname} ${authorData.lname}`} authorId={authorData._id}/>
   </div>
   );
 }
