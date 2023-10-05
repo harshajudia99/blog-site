@@ -3,6 +3,8 @@ require("./db/config");
 const cors = require("cors");
 const Author = require("./db/Author");
 const Blog = require("./db/Blog");
+const User = require("./db/User");
+const AdminUser = require("./db/AdminUser");
 const multer = require('multer');
 
 const app = express()
@@ -24,7 +26,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post('/createauthor', upload.single('file'), async (req, res) => {
-  console.log(req)
   try {
     let author = new Author({
       fname: req.body.fname,
@@ -214,6 +215,80 @@ app.delete('/deleteblog/:id', async(req,res)=>{
   let result = await Blog.deleteOne({_id: req.params.id});
   res.send(result);
 })
+
+app.post('/author/signup', async(req,res)=>{
+  try {
+    let user = new User({
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      password: req.body.password,
+    });
+
+    let result = await user.save();
+    
+    res.status(201).json(result); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' }); 
+  }
+})
+
+app.post('/author/signin', async (req, res) => {
+  if (req.body.email && req.body.password) {
+    try {
+      let user = await User.findOne(req.body).select("-password");
+      if (user) {
+        res.send(user);
+      } else {
+        res.send({ result: 'No user found' });
+      }
+    } catch (error) {
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
+  } else {
+    res.status(400).send({ error: 'Email and password are required' });
+  }
+});
+
+app.post('/admin/signup', async(req,res)=>{
+  try {
+    let user = new AdminUser({
+      fname: req.body.fname,
+      lname: req.body.lname,
+      email: req.body.email,
+      mobile: req.body.mobile,
+      password: req.body.password,
+    });
+
+    let result = await user.save();
+    
+    res.status(201).json(result); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' }); 
+  }
+})
+
+app.post('/admin/signin', async (req, res) => {
+  if (req.body.email && req.body.password) {
+    try {
+      let user = await AdminUser.findOne(req.body).select("-password");
+      if (user) {
+        res.send(user);
+      } else {
+        res.send({ result: 'No user found' });
+      }
+    } catch (error) {
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
+  } else {
+    res.status(400).send({ error: 'Email and password are required' });
+  }
+});
+
+
 
 
 app.listen(port, () => {

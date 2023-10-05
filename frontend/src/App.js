@@ -1,5 +1,8 @@
 import './App.css';
-import './Author.css'
+import './Author.css';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap/dist/css/bootstrap.min.css"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from './Components/Navbar';
 import { Home } from './Components/Home';
@@ -12,6 +15,9 @@ import { BlogClient } from './Components/BlogClient';
 import { ViewBlog } from './Components/ViewBlog/ViewBlog';
 import { MostLiked } from './Components/LikesAndComments/MostLiked';
 import { MostCommented } from './Components/LikesAndComments/MostCommented';
+import SignIn from './Components/Authentication/SignIn';
+import SignUp from './Components/Authentication/SignUp';
+
 function App() {
   return (
     <div className="App">
@@ -29,6 +35,10 @@ function App() {
               <Route path="/viewblog/:id" element={<ViewBlog/>}/>
               <Route path="/mostliked" element={<MostLiked/>}/>
               <Route path="/mostcommented" element={<MostCommented/>}/>
+              <Route path="/signin" element={<SignIn/>}/>
+              <Route path="/signup" element={<SignUp/>}/>
+              
+
           </Routes>
       </BrowserRouter>
     </div>

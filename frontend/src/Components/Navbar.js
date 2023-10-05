@@ -1,12 +1,20 @@
-import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 export default function Navbar(props) {
+  const navigate = useNavigate();
+  const auth = localStorage.getItem("user");
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    navigate("/signup");
+  };
+
   return (
     <>
-      <nav className="navbar navbar-expand-lg" style={{ background: 'pink' }}>
+      <nav className="navbar navbar-expand-lg" style={{ background: "pink" }}>
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/admin" style={{ color: 'black' }}>
+          <Link className="navbar-brand" to="/admin" style={{ color: "black" }}>
             {props.title}
           </Link>
           <button
@@ -21,39 +29,91 @@ export default function Navbar(props) {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+
+            {auth ? <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link" to="/" style={{ color: 'black' }}>
+                <Link className="nav-link" to="/" style={{ color: "black" }}>
                   Home
                 </Link>
               </li>
 
               <li className="nav-item">
-                <Link className="nav-link" to="/admin" style={{ color: 'black' }}>
+                <Link
+                  className="nav-link"
+                  to="/admin"
+                  style={{ color: "black" }}
+                >
                   Admin
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/admin/blog" style={{ color: 'black' }}>
+                <Link
+                  className="nav-link"
+                  to="/admin/blog"
+                  style={{ color: "black" }}
+                >
                   Add Blog
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/blog" style={{ color: 'black' }}>
+                <Link
+                  className="nav-link"
+                  to="/blog"
+                  style={{ color: "black" }}
+                >
                   Blog
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/mostliked" style={{ color: 'black' }}>
+                <Link
+                  className="nav-link"
+                  to="/mostliked"
+                  style={{ color: "black" }}
+                >
                   MostLiked
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/mostcommented" style={{ color: 'black' }}>
+                <Link
+                  className="nav-link"
+                  to="/mostcommented"
+                  style={{ color: "black" }}
+                >
                   MostCommented
                 </Link>
               </li>
+
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to="/signup"
+                  style={{ color: "black" }}
+                  onClick={logout}
+                >
+                  Logout ({JSON.parse(auth).fname})
+                </Link>
+              </li>
             </ul>
+              :
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0" ><li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to="/signup"
+                  style={{ color: "black" }}
+                >
+                  Sign Up
+                </Link>
+              </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/signin"
+                    style={{ color: "black" }}
+                  >
+                    Sign In
+                  </Link>
+                </li></ul>}
+
           </div>
         </div>
       </nav>
