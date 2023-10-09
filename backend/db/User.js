@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     email: String,
     mobile: String,
     password: String,
-    cpassword: String
+    cpassword: String,
+    isAdmin: { type: Boolean, default: false}
 });
 
 // password hashing

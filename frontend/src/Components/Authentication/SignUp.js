@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../../Auth.css";
 import { Link, useNavigate } from "react-router-dom";
-import SelectUser from "./SelectUser";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -12,7 +11,7 @@ export default function SignUp() {
     password: "",
     cpassword: "",
   });
-  const [selectedUser, setSelectedUser] = useState("");
+ 
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -28,11 +27,10 @@ export default function SignUp() {
 
     const data = {
       ...formData,
-      userRole: selectedUser,
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/${selectedUser}/signup`, {
+      const response = await fetch(`http://localhost:3000/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +52,6 @@ export default function SignUp() {
 
   return (
     <div>
-      <SelectUser setSelectedUser={setSelectedUser} />
       <div className="Auth-form-container">
         <form className="Auth-form" onSubmit={handleSubmit}>
           <div className="Auth-form-content">
@@ -65,7 +62,7 @@ export default function SignUp() {
               <input
                 type="text"
                 className="form-control mt-1"
-                placeholder="e.g Jane Doe"
+                placeholder="e.g Jane"
                 onChange={handleInputChange}
                 value={formData.fname}
                 name="fname"
@@ -77,7 +74,7 @@ export default function SignUp() {
               <input
                 type="text"
                 className="form-control mt-1"
-                placeholder="e.g Jane Doe"
+                placeholder="e.g Doe"
                 onChange={handleInputChange}
                 value={formData.lname}
                 name="lname"

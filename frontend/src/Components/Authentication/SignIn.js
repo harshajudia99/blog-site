@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../../Auth.css";
 import { Link, useNavigate } from "react-router-dom";
-import SelectUser from "./SelectUser";
 
 export default function SignIn() {
   const [signInData, setSignInData] = useState({
@@ -9,7 +8,6 @@ export default function SignIn() {
     password: "",
   });
 
-  const [selectedUser, setSelectedUser] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -26,7 +24,7 @@ export default function SignIn() {
     formData.append("email", signInData.email);
     formData.append("password", signInData.password);
     try {
-      const response = await fetch(`http://localhost:3000/${selectedUser}/signin`, {
+      const response = await fetch(`http://localhost:3000/signin`, {
         method: "POST",
         body: JSON.stringify(Object.fromEntries(formData)),
         headers: {
@@ -37,19 +35,11 @@ export default function SignIn() {
       if (response.ok) {
         const result = await response.json();
           
-        if(selectedUser === 'admin'){
-          localStorage.setItem("admin", JSON.stringify(result));
-        }
-        else if(selectedUser === 'author'){
-          localStorage.setItem("author", JSON.stringify(result));
-        }
+        localStorage.setItem("user", JSON.stringify(result));
        
 
-        if (selectedUser === "author") {
           navigate("/blog");
-        } else {
-          navigate("/admin");
-        }
+        
       } else {
         alert("Invalid email or password");
       }
@@ -60,7 +50,6 @@ export default function SignIn() {
 
   return (
     <div>
-      <SelectUser setSelectedUser={setSelectedUser} />
       <div className="Auth-form-container">
         <form className="Auth-form" onSubmit={handleSubmit}>
           <div className="Auth-form-content">

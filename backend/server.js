@@ -4,7 +4,6 @@ const cors = require("cors");
 const Author = require("./db/Author");
 const Blog = require("./db/Blog");
 const User = require("./db/User");
-const AdminUser = require("./db/AdminUser");
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 
@@ -217,121 +216,66 @@ app.delete('/deleteblog/:id', async (req, res) => {
   res.send(result);
 })
 
-app.post('/author/signup', async (req, res) => {
-  const { fname,
-    lname,
-    email,
-    mobile,
-    password,
-    cpassword } = req.body;
 
-    if(!fname || !lname || !email || !mobile || !password || !cpassword){
-      return res.status(400).send("All fields are required");
-    }
+app.post('/signup', async (req, res) => {
+    try {
+        const existingUser = await User.findOne({ email: req.body.email });
 
-    try{
-      const userExist=await User.findOne({email: email});
+        if (existingUser) {
+            return res.status(409).send({ error: 'Email is already registered' });
+        }
 
-      if(userExist){
-        return 	res.status(409).send('Email already exist');
-      }else if(password !== cpassword){
-        return 	res.status(409).send('Password not matching');
-      }else{
-        const user = new User({fname, lname, email, mobile, password, cpassword});
-        await user.save();
-        res.status(201).json({message: "User registered successfully"});
-      }
+        const user = new User({
+            fname: req.body.fname,
+            lname: req.body.lname,
+            email: req.body.email,
+            mobile: req.body.mobile,
+            password: req.body.password,
+            cpassword: req.body.cpassword
+        });
 
-    }catch(err){
-      console.log(err)
+        let result = await user.save();
+        res.send(result);
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error);
     }
 });
 
-app.post('/author/signin', async (req, res) => {
-  try {
+
+app.post('/signin', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(403).json({ "message": "Please enter all fields" });
+        return res.status(400).send({ error: 'Email and password are required' });
     }
+    try {
+        const user = await User.findOne({ email });
 
-    const userLogin = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(404).send({ result: 'No user found' });
+        }
 
-    const isMatch = await bcrypt.compare(password, userLogin.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
 
-    if (userLogin) {
-      if (!isMatch) {
-        res.status(400).json({ error: "Invalid credentials" })
-      } else {
-        res.json(userLogin);
+        if (passwordMatch) {
+            const userWithoutPassword = { ...user.toObject() };
+            delete userWithoutPassword.password;
+
+            if (user.isAdmin) {
+                res.send({ isAdmin: true, user: userWithoutPassword });
+            } else {
+                res.send({ isAdmin: false, user: userWithoutPassword });
+            }
+        } else {
+            res.status(401).send({ error: 'Incorrect password' });
+        }
+    } catch (error) {
+        console.error('Login Error:', error);
+        res.status(500).send({ error: 'Internal Server Error: ' + error.message });
       }
-    } else{
-      res.status(400).json({ error: "Invalid credentials" })
-    }
-
-  } catch (err) {
-    console.log(err);
-  }
+      
 });
-
-app.post('/admin/signup', async (req, res) => {
-  const { fname,
-    lname,
-    email,
-    mobile,
-    password,
-    cpassword } = req.body;
-
-    if(!fname || !lname || !email || !mobile || !password || !cpassword){
-      return res.status(400).send("All fields are required");
-    }
-
-    try{
-      const adminExist=await AdminUser.findOne({email: email});
-
-      if(adminExist){
-        return 	res.status(409).send('Email already exist');
-      }else if(password !== cpassword){
-        return 	res.status(409).send('Password not matching');
-      }else{
-        const admin = new AdminUser({fname, lname, email, mobile, password, cpassword});
-        await admin.save();
-        res.status(201).json({message: "Admin registered successfully"});
-      }
-
-    }catch(err){
-      console.log(err)
-    }
-})
-
-app.post('/admin/signin', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(403).json({ "message": "Please enter all fields" });
-    }
-
-    const adminLogin = await AdminUser.findOne({ email: email });
-
-    const isMatch = await bcrypt.compare(password, adminLogin.password);
-
-    if (adminLogin) {
-      if (!isMatch) {
-        res.status(400).json({ error: "Invalid credentials" })
-      } else {
-        res.json(adminLogin);
-      }
-    } else{
-      res.status(400).json({ error: "Invalid credentials" })
-    }
-
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-
 
 
 app.listen(port, () => {
