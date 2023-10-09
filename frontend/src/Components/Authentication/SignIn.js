@@ -22,8 +22,7 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
+     const formData = new FormData();
     formData.append("email", signInData.email);
     formData.append("password", signInData.password);
     try {

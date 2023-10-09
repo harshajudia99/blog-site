@@ -10,6 +10,7 @@ export default function SignUp() {
     email: "",
     mobile: "",
     password: "",
+    cpassword: "",
   });
   const [selectedUser, setSelectedUser] = useState("");
   const navigate = useNavigate();
@@ -38,11 +39,13 @@ export default function SignUp() {
         },
         body: JSON.stringify(data),
       });
-
-      if (response.ok) {
+      if(response.status === 409){
+        alert("Email already exist")
+      }
+      else if (response.ok) {
         navigate("/signin");
       } else {
-        console.error("Error:", response.status);
+        console.log("Error:", response.status);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -86,7 +89,7 @@ export default function SignUp() {
               <input
                 type="email"
                 className="form-control mt-1"
-                placeholder="Email Address"
+                placeholder="Email address"
                 onChange={handleInputChange}
                 value={formData.email}
                 name="email"
@@ -98,7 +101,7 @@ export default function SignUp() {
               <input
                 type="tel"
                 className="form-control mt-1"
-                placeholder="Mobile Number"
+                placeholder="Mobile number"
                 onChange={handleInputChange}
                 value={formData.mobile}
                 name="mobile"
@@ -114,6 +117,18 @@ export default function SignUp() {
                 onChange={handleInputChange}
                 value={formData.password}
                 name="password"
+                required
+              />
+            </div>
+            <div className="form-group mt-3">
+              <label className="label">Confirm Password</label>
+              <input
+                type="password"
+                className="form-control mt-1"
+                placeholder="Enter confirm password"
+                onChange={handleInputChange}
+                value={formData.cpassword}
+                name="cpassword"
                 required
               />
             </div>

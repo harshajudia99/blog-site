@@ -5,11 +5,12 @@ const Author = require("./db/Author");
 const Blog = require("./db/Blog");
 const User = require("./db/User");
 const AdminUser = require("./db/AdminUser");
+const bcrypt = require('bcrypt');
 const multer = require('multer');
 
 const app = express()
 app.use(express.json());
-app.use(cors()); 
+app.use(cors());
 
 const port = 3000
 
@@ -36,11 +37,11 @@ app.post('/createauthor', upload.single('file'), async (req, res) => {
     });
 
     let result = await author.save();
-    
-    res.status(201).json(result); 
+
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' }); 
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -91,31 +92,31 @@ app.post('/createauthor', upload.single('file'), async (req, res) => {
     });
 
     let result = await author.save();
-    
-    res.status(201).json(result); 
+
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' }); 
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 
-app.get('/get/:id', async(req,res)=>{
-  let result = await Author.findOne({_id: req.params.id})
+app.get('/get/:id', async (req, res) => {
+  let result = await Author.findOne({ _id: req.params.id })
   res.send(result);
 })
 
-app.get('/getauthor', async(req,res) =>{
+app.get('/getauthor', async (req, res) => {
   const data = await Author.find();
-    res.json(data);
+  res.json(data);
 })
 
-app.delete('/deleteauthor/:id', async(req,res)=>{
-  let result = await Author.deleteOne({_id: req.params.id});
+app.delete('/deleteauthor/:id', async (req, res) => {
+  let result = await Author.deleteOne({ _id: req.params.id });
   res.send(result);
 })
 
-app.post('/addblog',upload.single('file'), async(req,res)=>{
+app.post('/addblog', upload.single('file'), async (req, res) => {
   try {
     let author = new Blog({
       authorId: req.body.authorId,
@@ -128,19 +129,19 @@ app.post('/addblog',upload.single('file'), async(req,res)=>{
     });
 
     let result = await author.save();
-    
-    res.status(201).json(result); 
+
+    res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' }); 
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 
 
-app.get('/getblog', async(req,res) =>{
+app.get('/getblog', async (req, res) => {
   const data = await Blog.find();
-    res.json(data);
+  res.json(data);
 })
 
 
@@ -152,7 +153,7 @@ app.put('/updateblog/:id', upload.single('file'), async (req, resp) => {
     if (req.file) {
       updateFields.image = req.file.filename;
     }
-    if(req.body.authorId){
+    if (req.body.authorId) {
       updateFields.authorId = req.body.authorId;
     }
     if (req.body.name) {
@@ -185,7 +186,7 @@ app.put('/updateblog/:id', upload.single('file'), async (req, resp) => {
 });
 
 
-app.post('/insertcomment/:id' , async (req, res) => {
+app.post('/insertcomment/:id', async (req, res) => {
   try {
     const updatedBlog = await Blog.findOneAndUpdate(
       { _id: req.params.id },
@@ -206,85 +207,127 @@ app.post('/insertcomment/:id' , async (req, res) => {
   }
 });
 
-app.get('/getblogdata/:id', async(req,res)=>{
-  let result = await Blog.findOne({_id: req.params.id})
+app.get('/getblogdata/:id', async (req, res) => {
+  let result = await Blog.findOne({ _id: req.params.id })
   res.send(result);
 })
 
-app.delete('/deleteblog/:id', async(req,res)=>{
-  let result = await Blog.deleteOne({_id: req.params.id});
+app.delete('/deleteblog/:id', async (req, res) => {
+  let result = await Blog.deleteOne({ _id: req.params.id });
   res.send(result);
 })
 
-app.post('/author/signup', async(req,res)=>{
-  try {
-    let user = new User({
-      fname: req.body.fname,
-      lname: req.body.lname,
-      email: req.body.email,
-      mobile: req.body.mobile,
-      password: req.body.password,
-    });
+app.post('/author/signup', async (req, res) => {
+  const { fname,
+    lname,
+    email,
+    mobile,
+    password,
+    cpassword } = req.body;
 
-    let result = await user.save();
-    
-    res.status(201).json(result); 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' }); 
-  }
-})
+    if(!fname || !lname || !email || !mobile || !password || !cpassword){
+      return res.status(400).send("All fields are required");
+    }
+
+    try{
+      const userExist=await User.findOne({email: email});
+
+      if(userExist){
+        return 	res.status(409).send('Email already exist');
+      }else if(password !== cpassword){
+        return 	res.status(409).send('Password not matching');
+      }else{
+        const user = new User({fname, lname, email, mobile, password, cpassword});
+        await user.save();
+        res.status(201).json({message: "User registered successfully"});
+      }
+
+    }catch(err){
+      console.log(err)
+    }
+});
 
 app.post('/author/signin', async (req, res) => {
-  if (req.body.email && req.body.password) {
-    try {
-      let user = await User.findOne(req.body).select("-password");
-      if (user) {
-        res.send(user);
-      } else {
-        res.send({ result: 'No user found' });
-      }
-    } catch (error) {
-      res.status(500).send({ error: 'Internal Server Error' });
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(403).json({ "message": "Please enter all fields" });
     }
-  } else {
-    res.status(400).send({ error: 'Email and password are required' });
+
+    const userLogin = await User.findOne({ email: email });
+
+    const isMatch = await bcrypt.compare(password, userLogin.password);
+
+    if (userLogin) {
+      if (!isMatch) {
+        res.status(400).json({ error: "Invalid credentials" })
+      } else {
+        res.json(userLogin);
+      }
+    } else{
+      res.status(400).json({ error: "Invalid credentials" })
+    }
+
+  } catch (err) {
+    console.log(err);
   }
 });
 
-app.post('/admin/signup', async(req,res)=>{
-  try {
-    let user = new AdminUser({
-      fname: req.body.fname,
-      lname: req.body.lname,
-      email: req.body.email,
-      mobile: req.body.mobile,
-      password: req.body.password,
-    });
+app.post('/admin/signup', async (req, res) => {
+  const { fname,
+    lname,
+    email,
+    mobile,
+    password,
+    cpassword } = req.body;
 
-    let result = await user.save();
-    
-    res.status(201).json(result); 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' }); 
-  }
+    if(!fname || !lname || !email || !mobile || !password || !cpassword){
+      return res.status(400).send("All fields are required");
+    }
+
+    try{
+      const adminExist=await AdminUser.findOne({email: email});
+
+      if(adminExist){
+        return 	res.status(409).send('Email already exist');
+      }else if(password !== cpassword){
+        return 	res.status(409).send('Password not matching');
+      }else{
+        const admin = new AdminUser({fname, lname, email, mobile, password, cpassword});
+        await admin.save();
+        res.status(201).json({message: "Admin registered successfully"});
+      }
+
+    }catch(err){
+      console.log(err)
+    }
 })
 
 app.post('/admin/signin', async (req, res) => {
-  if (req.body.email && req.body.password) {
-    try {
-      let user = await AdminUser.findOne(req.body).select("-password");
-      if (user) {
-        res.send(user);
-      } else {
-        res.send({ result: 'No user found' });
-      }
-    } catch (error) {
-      res.status(500).send({ error: 'Internal Server Error' });
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(403).json({ "message": "Please enter all fields" });
     }
-  } else {
-    res.status(400).send({ error: 'Email and password are required' });
+
+    const adminLogin = await AdminUser.findOne({ email: email });
+
+    const isMatch = await bcrypt.compare(password, adminLogin.password);
+
+    if (adminLogin) {
+      if (!isMatch) {
+        res.status(400).json({ error: "Invalid credentials" })
+      } else {
+        res.json(adminLogin);
+      }
+    } else{
+      res.status(400).json({ error: "Invalid credentials" })
+    }
+
+  } catch (err) {
+    console.log(err);
   }
 });
 
