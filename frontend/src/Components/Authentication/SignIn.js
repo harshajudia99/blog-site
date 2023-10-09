@@ -36,7 +36,13 @@ export default function SignIn() {
 
       if (response.ok) {
         const result = await response.json();
-          localStorage.setItem("user", JSON.stringify(result));
+          
+        if(selectedUser === 'admin'){
+          localStorage.setItem("admin", JSON.stringify(result));
+        }
+        else if(selectedUser === 'author'){
+          localStorage.setItem("author", JSON.stringify(result));
+        }
        
 
         if (selectedUser === "author") {

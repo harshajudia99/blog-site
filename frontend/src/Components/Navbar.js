@@ -3,10 +3,12 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 
 export default function Navbar(props) {
   const navigate = useNavigate();
-  const auth = localStorage.getItem("user");
 
-  const logout = () => {
-    localStorage.removeItem("user");
+  const isAdmin = localStorage.getItem('admin')
+  const isAuthor = localStorage.getItem('author')
+
+  const logout = (userType) => {
+    localStorage.removeItem(userType); // Remove the specific user type from localStorage
     navigate("/signup");
   };
 
@@ -30,80 +32,95 @@ export default function Navbar(props) {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
-            {auth ? <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <Link className="nav-link" to="/" style={{ color: "black" }}>
-                  Home
-                </Link>
-              </li>
+            {isAdmin && (
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/" style={{ color: "black" }}>
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/admin"
+                    style={{ color: "black" }}
+                  >
+                    Admin
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/admin/blog"
+                    style={{ color: "black" }}
+                  >
+                    Add Blog
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="nav-link"
+                    style={{ color: "black", border: 'none', background: 'none', cursor: 'pointer' }}
+                    onClick={() => logout('admin')}
+                  >
+                    Logout ({JSON.parse(isAdmin).fname})
+                  </button>
+                </li>
+              </ul>
+            )}
 
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/admin"
-                  style={{ color: "black" }}
-                >
-                  Admin
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/admin/blog"
-                  style={{ color: "black" }}
-                >
-                  Add Blog
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/blog"
-                  style={{ color: "black" }}
-                >
-                  Blog
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/mostliked"
-                  style={{ color: "black" }}
-                >
-                  MostLiked
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/mostcommented"
-                  style={{ color: "black" }}
-                >
-                  MostCommented
-                </Link>
-              </li>
+            {isAuthor && (
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/blog"
+                    style={{ color: "black" }}
+                  >
+                    Blog
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/mostliked"
+                    style={{ color: "black" }}
+                  >
+                    MostLiked
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/mostcommented"
+                    style={{ color: "black" }}
+                  >
+                    MostCommented
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="nav-link"
+                    style={{ color: "black", border: 'none', background: 'none', cursor: 'pointer' }}
+                    onClick={() => logout('author')}
+                  >
+                    Logout ({JSON.parse(isAuthor).fname})
+                  </button>
+                </li>
+              </ul>
+            )}
 
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/signup"
-                  style={{ color: "black" }}
-                  onClick={logout}
-                >
-                  Logout ({JSON.parse(auth).fname})
-                </Link>
-              </li>
-            </ul>
-              :
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0" ><li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/signup"
-                  style={{ color: "black" }}
-                >
-                  Sign Up
-                </Link>
-              </li>
+            {!isAdmin && !isAuthor && (
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/signup"
+                    style={{ color: "black" }}
+                  >
+                    Sign Up
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <Link
                     className="nav-link"
@@ -112,7 +129,9 @@ export default function Navbar(props) {
                   >
                     Sign In
                   </Link>
-                </li></ul>}
+                </li>
+              </ul>
+            )}
 
           </div>
         </div>
