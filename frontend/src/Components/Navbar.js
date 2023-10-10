@@ -7,6 +7,7 @@ export default function Navbar(props) {
   const auth = localStorage.getItem("user");
   const userData = JSON.parse(auth);
   const isAdminValue = userData && userData.isAdmin;
+  
 
   const logout = () => {
     localStorage.removeItem("user"); 
@@ -93,7 +94,7 @@ export default function Navbar(props) {
                       style={{ color: "black", border: 'none', background: 'none', cursor: 'pointer' }}
                       onClick={() => logout('author')}
                     >
-                      Logout 
+                      Logout ({userData.user.fname})
                     </button>
                   </li>
                 </ul>
@@ -133,7 +134,7 @@ export default function Navbar(props) {
                       style={{ color: "black", border: 'none', background: 'none', cursor: 'pointer' }}
                       onClick={() => logout('author')}
                     >
-                      Logout 
+                      Logout ({userData.user.fname})
                     </button>
                   </li>
                 </ul>
