@@ -9,7 +9,7 @@ export default function Navbar(props) {
   const isAdminValue = userData && userData.isAdmin;
 
   const logout = () => {
-    localStorage.removeItem("user"); // Remove the user data from localStorage
+    localStorage.removeItem("user"); 
     navigate("/signup");
   };
 
@@ -34,7 +34,7 @@ export default function Navbar(props) {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             {auth ? (
               isAdminValue ? (
-                // Render this ul if isAdmin is true
+                
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item">
                     <Link className="nav-link" to="/" style={{ color: "black" }}>
@@ -44,38 +44,26 @@ export default function Navbar(props) {
                   <li className="nav-item">
                     <Link
                       className="nav-link"
-                      to="/admin"
+                      to="/admin/addauthor"
                       style={{ color: "black" }}
                     >
-                      Admin
+                      Add Author
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link
                       className="nav-link"
-                      to="/admin/blog"
+                      to="/admin/addblog"
                       style={{ color: "black" }}
                     >
                       Add Blog
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <button
-                      className="nav-link"
-                      style={{ color: "black", border: 'none', background: 'none', cursor: 'pointer' }}
-                      onClick={() => logout('admin')}
-                    >
-                      Logout 
-                    </button>
-                  </li>
-                </ul>
-              ) : (
-                // Render this ul if isAdmin is false
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  
                   <li className="nav-item">
                     <Link
                       className="nav-link"
-                      to="/blog"
+                      to="/author/blog"
                       style={{ color: "black" }}
                     >
                       Blog
@@ -84,7 +72,7 @@ export default function Navbar(props) {
                   <li className="nav-item">
                     <Link
                       className="nav-link"
-                      to="/mostliked"
+                      to="/author/mostliked"
                       style={{ color: "black" }}
                     >
                       Most Liked
@@ -93,7 +81,47 @@ export default function Navbar(props) {
                   <li className="nav-item">
                     <Link
                       className="nav-link"
-                      to="/mostcommented"
+                      to="/author/mostcommented"
+                      style={{ color: "black" }}
+                    >
+                      Most Commented
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      className="nav-link"
+                      style={{ color: "black", border: 'none', background: 'none', cursor: 'pointer' }}
+                      onClick={() => logout('author')}
+                    >
+                      Logout 
+                    </button>
+                  </li>
+                </ul>
+              ) : (
+                
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to="/author/blog"
+                      style={{ color: "black" }}
+                    >
+                      Blog
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to="/author/mostliked"
+                      style={{ color: "black" }}
+                    >
+                      Most Liked
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to="/author/mostcommented"
                       style={{ color: "black" }}
                     >
                       Most Commented
@@ -111,7 +139,7 @@ export default function Navbar(props) {
                 </ul>
               )
             ) : (
-              // Render this ul if there is no user data in localStorage
+              
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
                   <Link

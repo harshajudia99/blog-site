@@ -37,8 +37,13 @@ export default function SignIn() {
           
         localStorage.setItem("user", JSON.stringify(result));
        
+        if(result.isAdmin){
+          navigate("/admin/addauthor");
+        }
+        else if(!result.isAdmin){
+          navigate("/author/blog");
+        }
 
-          navigate("/blog");
         
       } else {
         alert("Invalid email or password");
@@ -46,6 +51,8 @@ export default function SignIn() {
     } catch (error) {
       console.error("Error:", error);
     }
+
+    window.location.reload(true);
   };
 
   return (

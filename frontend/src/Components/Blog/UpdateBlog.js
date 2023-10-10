@@ -101,7 +101,7 @@ export const UpdateBlog = () => {
       }
     );
     result = await result.json();
-    navigate("/admin/blog");
+    navigate("/admin/addblog");
   };
 
 

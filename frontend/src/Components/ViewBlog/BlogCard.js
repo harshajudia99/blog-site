@@ -23,7 +23,7 @@ export default function BlogCard() {
   };
 
   const handleViewProfileClick = (authorId) => {
-    navigate(`/profile/${authorId}`);
+    navigate(`/author/profile/${authorId}`);
   };
 
   return (

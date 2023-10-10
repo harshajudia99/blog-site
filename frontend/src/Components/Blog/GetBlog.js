@@ -73,7 +73,7 @@ export const GetBlog = () => {
                                     {/* <Button type="submit" size="small">
                                         <Link className="update-btn-link" to={`/updateblog/${row._id}`}>Update Blog</Link>
                                     </Button> */}
-                                    <IconButton size="small" component={Link} to={`/updateblog/${row._id}`}>
+                                    <IconButton size="small" component={Link} to={`/admin/updateblog/${row._id}`}>
                                         <ModeEditIcon />
                                     </IconButton>
                                     <DeleteOutlineIcon onClick={() => deleteBlog(row._id, row.title)} className='del-btn del-btn-bloglist' />

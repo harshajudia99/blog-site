@@ -54,7 +54,7 @@ export const MostCommented = () => {
                                 <TableCell align="right">{row.comments.length}</TableCell>
                                 <TableCell align="right" className='blog-list-edit'>
                                     <Button type="submit" size="small">
-                                        <Link className="update-btn-link" to={`/viewblog/${row._id}`}>View</Link>
+                                        <Link className="update-btn-link" to={`/author/viewblog/${row._id}`}>View</Link>
                                     </Button>
                                 </TableCell>
                             </TableRow>

@@ -92,7 +92,7 @@ const handleImage = (e) =>{
       }
     );
     result = await result.json();
-    navigate("/admin");
+    navigate("/admin/addauthor");
   };
 
   return (

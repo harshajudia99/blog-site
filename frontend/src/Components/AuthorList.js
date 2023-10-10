@@ -71,7 +71,7 @@ export default function AuthorList({ open, setOpen }) {
                                     {/* <Button type="submit" size="small">
                                     <Link className="update-btn-link" to={`/updateauthor/${row._id}`}>Update Author</Link>
                                 </Button> */}
-                                    <IconButton size="small" component={Link} to={`/updateauthor/${row._id}`}>
+                                    <IconButton size="small" component={Link} to={`/admin/updateauthor/${row._id}`}>
                                         <ModeEditIcon />
                                     </IconButton>
                                     <DeleteOutlineIcon onClick={() => deleteAuthor(row._id, row.fname)} className='del-btn' />

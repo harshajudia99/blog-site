@@ -79,25 +79,25 @@ app.put('/updateauthor/:id', upload.single('file'), async (req, resp) => {
 });
 
 
-app.post('/createauthor', upload.single('file'), async (req, res) => {
-  console.log(req)
-  try {
-    let author = new Author({
-      fname: req.body.fname,
-      lname: req.body.lname,
-      email: req.body.email,
-      mobile: req.body.mobile,
-      image: req.file.filename,
-    });
+// app.post('/createauthor', upload.single('file'), async (req, res) => {
+//   console.log(req)
+//   try {
+//     let author = new Author({
+//       fname: req.body.fname,
+//       lname: req.body.lname,
+//       email: req.body.email,
+//       mobile: req.body.mobile,
+//       image: req.file.filename,
+//     });
 
-    let result = await author.save();
+//     let result = await author.save();
 
-    res.status(201).json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+//     res.status(201).json(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
 
 
 app.get('/get/:id', async (req, res) => {

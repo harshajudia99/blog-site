@@ -84,7 +84,7 @@ export const AuthorPost = ({ name, authorId }) => {
                       >
                         <Link
                           className="update-btn-link"
-                          to={`/viewblog/${row._id}`}
+                          to={`/author/viewblog/${row._id}`}
                         >
                           View Blog
                         </Link>
